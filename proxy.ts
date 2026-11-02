@@ -1,103 +1,122 @@
-// import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server";
 import { verifyAccessToken } from "./utils/auth";
+import { refreshAccessToken } from "./utils/refreshSession";
 import { accessCookieOptions } from "./utils/cookies";
 
-
-const PROTECTED_PREFIXES = ['/p-user'];
+const PROTECTED_PREFIXES = ["/p-user", "/p-admin"];
 
 
 export async function proxy(req: NextRequest) {
    
-   console.log(`🟣 Middleware - path: ${req.nextUrl.pathname}`)
-
-   // const cookieStore = await cookies();
-
    const { pathname, search } = req.nextUrl;
 
    const accessToken = req.cookies.get('token')?.value;
    const refreshToken = req.cookies.get('refresh-token')?.value;
 
-   // if we have a valid 'access-token', user can continue
-   if (accessToken) {
-      const payload = verifyAccessToken(accessToken);
-
-      if (payload?.email) {
-         console.log('🐲 token is valid')
-         return NextResponse.next();
-      }
+   // Valid Access-Token
+   if (accessToken && verifyAccessToken(accessToken)?.email) {
+      console.log('🐲 Valid access-token')
+      return NextResponse.next();
    }
 
-   console.log('🚫 token expired')
+   if (accessToken) {
+      console.log("🚫 Invalid/Expired Access-Token")
+   }
+   else {
+      console.log("🚫 No Access-Token")
+   }
+
+
+   // Invalid Access-Token -> Try to refresh
+   let invalidRefreshToken = false;
 
    if (refreshToken) {
 
-      console.log('🔃 Refreshing Token')
+      console.log('🔄 Refreshing token...')
 
-      const res = await fetch(new URL('/api/auth/refresh', req.url), {
-         method: 'POST',
-         headers: { cookie: `refresh-token=${refreshToken}` },
-      })
+      try {
 
+         const newAccessToken = await refreshAccessToken(refreshToken);
 
-      if (res.ok) {
-         const { accessToken: newToken } = await res.json();
+         if (newAccessToken) {
 
-         // we put new access token, for the request which is going to go from this middleware, to request-destination
-         const requestHeaders = new Headers(req.headers);
+            const requestHeaders = new Headers(req.headers);
 
-         const oldCookies = req.headers.get('cookie') ?? '';
+            const oldCookies = req.headers.get('cookie') ?? '';
+   
+            const cleaned = oldCookies
+               .split(';')
+               .map(c => c.trim())
+               .filter(c => c && !c.startsWith('token='))
+               .join('; ')
+            ;
+            
+            requestHeaders.set(
+               'cookie',
+               cleaned ? `${cleaned}; token=${newAccessToken}` : `token=${newAccessToken}`
+            )
+            
+   
+            const response = NextResponse.next(
+               {
+                  request: { headers: requestHeaders }
+               }
+            )
+   
+            // also we put new access-token in 'response' which is returned from destination and going back to 'browser'
+            response.cookies.set(
+               'token',
+               newAccessToken,
+               accessCookieOptions
+            )
+   
+            return response;
+         }
 
-         const cleaned = oldCookies
-            .split(';')
-            .map(c => c.trim())
-            .filter(c => c && !c.startsWith('token='))
-            .join('; ')
-         ;
+         invalidRefreshToken = true;
          
-         requestHeaders.set(
-            'cookie',
-            `${cleaned}; token=${newToken}`
-         )
-         
-
-         const response = NextResponse.next(
-            {
-               request: { headers: requestHeaders }
-            }
-         )
-
-         // also we put new access-token in 'response' which is returned from destination and going back to 'browser'
-         response.cookies.set(
-            'token',
-            newToken,
-            accessCookieOptions
-         )
-
-         return response;
+      } catch (error) {
+         console.log("🔴 refresh failed:", error instanceof Error ? error.message : error);
       }
    }
-   
 
-
-   // No refresh-token nor access-token -> Not any valid-session
-
-   const isProtected = PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-
-
-   if (isProtected) {
-      return NextResponse.redirect(new URL(`/signin?return_url=${pathname}${search}`, req.url));
+   if (refreshToken) {
+      console.log("🚫 Invalid/Expired Refresh-Token")
+   }
+   else {
+      console.log("🚫 No Refresh-Token")
    }
 
-   
-   // Public pages -> allow Guest-User to continue
-   return NextResponse.next();
+   // Not any valid-session -> Unauthorized 
+   //  ->  if not proteced page  -> continue
+   //  ->  if proteced page  -> redirect to /signin
+   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
+
+   const response = isProtected
+   ? NextResponse.redirect(
+      new URL(`/signin?return_url=${encodeURIComponent(`${pathname}${search}`)}`, req.url)
+   )
+   : NextResponse.next()
+
+
+   // clean invalid refresh-token from browser
+   if (invalidRefreshToken) {
+      response.cookies.set(
+         'refresh-token',
+         '',
+         {
+            path: '/',
+            maxAge: 0,
+         }
+      )
+   }
+
+   return response;
 }
 
 
 export const config = {
    matcher: [
-      // '/p-user/:path*',
-      '/((?!_next/static|_next/image|favicon.ico|api/auth|.*\\.(?:png|jpg|jpeg|svg|webp|ico|css|js)$).*)',
-   ]
-}
+      "/((?!_next/static|_next/image|favicon.ico|\\.well-known|api/auth|api/files|.*\\.(?:png|jpg|jpeg|svg|webp|ico|css|js)$).*)",
+   ],
+};

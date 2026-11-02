@@ -104,6 +104,9 @@ const EditProfile = ({ user }: EditProfileProps) => {
             });
             return;
          }
+         else {
+            throw new Error('Unknown Error')
+         }
       } catch (error) {
          toast.add({
             type: "error",

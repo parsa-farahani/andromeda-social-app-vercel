@@ -43,6 +43,7 @@ yarn-error.log*
 
 # backup files
 proxy_bk.ts
+proxy_bk_2.ts
 /app/api/auth/refresh/route_bk.ts
 
 # dev files

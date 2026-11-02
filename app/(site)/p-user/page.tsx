@@ -32,6 +32,8 @@ const PUser = async () => {
 
   const posts = await attachIsLiked<Post>(plainPosts, user?._id)
 
+  console.log('📘 posts[0].title -> ', posts[0]?.title);
+
   const commentsDocs = await CommentModel.find(
     {
       user: user._id,

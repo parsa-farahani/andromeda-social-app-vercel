@@ -53,7 +53,7 @@ const PUser = async () => {
       <hr className='mb-2 mt-4 md:mt-6 md:mb-3' />
 
       <section className="grow flex flex-col min-h-0" >
-        <PostsPanel user={user} posts={posts} comments={comments} />
+        <PostsPanel key={posts[0]?._id ?? 'empty'} user={user} posts={posts} comments={comments} />
       </section>
     </>
   )

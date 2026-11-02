@@ -147,6 +147,7 @@ const CreatePostForm = (
       setValue("tags", []);
    
       router.push('/p-user');
+      router.refresh();
    }
 
 

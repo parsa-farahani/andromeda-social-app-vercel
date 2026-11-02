@@ -1,9 +1,8 @@
 'use client';
 
 import { ArrowRight } from 'lucide-react'
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { Post, User } from '@/types/mongooseTypes';
-import Modal from '@/components/modules/Modal/Modal';
 import PostCard from '@/components/modules/PostCard/PostCard';
 import Link from 'next/link';
 
@@ -15,30 +14,13 @@ interface PostsListProps {
 
 
 const PostsList = (
-   { user, posts=[] }: PostsListProps
+   { posts=[] }: PostsListProps
 ) => {
-
-
-   const [showCreateModal, setShowCreateModal] = useState(false);
-
-
-   const handleCloseCreateModal = useCallback(
-      () => {
-         setShowCreateModal(false)
-      }
-      , []
-   )
 
 
   return (
     <div className='grow flex flex-col min-h-0' >
 
-      <Modal
-         isOpen={showCreateModal}
-         onClose={handleCloseCreateModal}
-      >
-         create modal
-      </Modal>
       
       <Link
          href="/p-user/create"

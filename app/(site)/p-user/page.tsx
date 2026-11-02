@@ -46,7 +46,6 @@ const PUser = async () => {
 
   const comments = await attachIsLiked<Comment>(plainComments, user._id);
 
-  await new Promise((res) => setTimeout(res, 2000))
 
   return (
     <>

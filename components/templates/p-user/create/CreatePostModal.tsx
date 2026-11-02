@@ -26,7 +26,7 @@ const CreatePostModal = (
       onClose={() => router.back()}
       className='md:w-[600px]! md:max-w-[80vw]!'
     >
-      <CreatePostForm user={user} onComplete={handleComplete} />
+      <CreatePostForm user={user} onComplete={handleComplete} isModal={true} />
     </Modal>
   )
 }

@@ -24,9 +24,11 @@ const CreatePostForm = (
    {
       user,
       onComplete,
+      isModal,
    }: {
       user: User;
       onComplete?: () => void;
+      isModal?: boolean;
    }
 ) => {
 
@@ -152,7 +154,7 @@ const CreatePostForm = (
       // router.replace('/p-user')
       // router.refresh();
 
-      if (window.history.length > 1) router.back()
+      if (isModal && window.history.length > 1) router.back()
       else router.replace('/p-user')
    }
 

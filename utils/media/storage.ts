@@ -14,6 +14,9 @@ export async function saveImage(
    ext: string,        // detectImage() output
    folder: "users" | "posts" | "comments"
 ) {
+
+   console.log("Blob token exists:", Boolean(process.env.BLOB_READ_WRITE_TOKEN));
+
    const blob = await put(`${folder}/${fileName}`, buffer, {
       access: "public",
       contentType: CONTENT_TYPES[ext],

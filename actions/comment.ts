@@ -156,7 +156,7 @@ export const createComment = async  (formData: FormData): Promise<CreateCommentS
          
          const fileName = safeFileName(ext);
          
-         imagePath = await saveImage(buffer, fileName, ext, "users");
+         imagePath = await saveImage(buffer, fileName, ext, "comments");
          
       }
 

@@ -117,7 +117,7 @@ export const createPost = async  (formData: FormData): Promise<CreatePostState> 
                   
          const fileName = safeFileName(ext);
 
-         imagePath = await saveImage(buffer, fileName, ext, "users");
+         imagePath = await saveImage(buffer, fileName, ext, "posts");
       }
 
 

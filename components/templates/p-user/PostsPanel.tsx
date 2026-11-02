@@ -53,7 +53,7 @@ const PostsPanel = (
             {
                (currentContent === 'posts')
                ? (
-               <PostsList user={user} posts={posts} />
+               <PostsList key={posts[0]?._id ?? 'empty'} user={user} posts={posts} />
                ) : (currentContent === 'comments') ? (
                   <CommentsList comments={comments} />
                ) : null

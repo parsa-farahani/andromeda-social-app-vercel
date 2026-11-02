@@ -149,8 +149,11 @@ const CreatePostForm = (
       // router.push('/p-user');
       // router.refresh();
       
-      router.replace('/p-user')
-      router.refresh();
+      // router.replace('/p-user')
+      // router.refresh();
+
+      if (window.history.length > 1) router.back()
+      else router.replace('/p-user')
    }
 
 

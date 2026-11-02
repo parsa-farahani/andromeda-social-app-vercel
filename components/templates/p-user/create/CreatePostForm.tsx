@@ -154,8 +154,6 @@ const CreatePostForm = (
       // router.replace('/p-user')
       // router.refresh();
 
-      if (isModal && window.history.length > 1) router.back()
-      else router.replace('/p-user')
    }
 
 

@@ -146,7 +146,10 @@ const CreatePostForm = (
       setValue("image", undefined);
       setValue("tags", []);
    
-      router.push('/p-user');
+      // router.push('/p-user');
+      // router.refresh();
+      
+      router.replace('/p-user')
       router.refresh();
    }
 

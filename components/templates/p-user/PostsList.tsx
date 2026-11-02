@@ -17,6 +17,7 @@ const PostsList = (
    { posts=[] }: PostsListProps
 ) => {
 
+   console.log('🐳 PostsList - post[0].title -> ', posts[0]?.title);
 
   return (
     <div className='grow flex flex-col min-h-0' >

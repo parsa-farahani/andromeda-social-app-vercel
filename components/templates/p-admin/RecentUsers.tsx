@@ -20,8 +20,6 @@ const RecentUsers = async () => {
   const recentUsers: User[] = JSON.parse(JSON.stringify(recentUsersDocs));
 
 
-  await new Promise((res) => setTimeout(res, 3000))
-
 
   return (
     <div

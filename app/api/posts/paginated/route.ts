@@ -17,8 +17,6 @@ export async function GET(
       await connectToDB()
       const result = await getPosts(cursor, user?._id)
 
-      await new Promise((res) => setTimeout(res, 1000))
-
       return NextResponse.json(
          result,
          {status: 200}

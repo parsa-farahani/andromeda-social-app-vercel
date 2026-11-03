@@ -20,8 +20,6 @@ const RegisterationChart = async () => {
 
    const total = data.reduce((sum, d) => sum + d.count, 0)
 
-   await new Promise(res => setTimeout(res, 1000))
-
   return (
     <div
       className=" rounded-lg p-5 "

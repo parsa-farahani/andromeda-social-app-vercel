@@ -20,7 +20,6 @@ const PostsResults = async (
       getPosts(null, user?._id),
    ]);
 
-   await new Promise((res) => setTimeout(res, 1000));
 
    
 

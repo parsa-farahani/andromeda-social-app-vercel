@@ -21,8 +21,6 @@ const RecentPosts = async () => {
   const recentPosts: Post[] = JSON.parse(JSON.stringify(recentPostsDocs));
 
 
-  await new Promise((res) => setTimeout(res, 2000))
-
 
   return (
     <div

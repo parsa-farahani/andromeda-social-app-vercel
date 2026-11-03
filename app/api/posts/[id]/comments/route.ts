@@ -25,7 +25,6 @@ export async function GET(
       await connectToDB()
       const result = await getPostComments(id, cursor)
 
-      // await new Promise((res) => setTimeout(res, 2000))
 
       return NextResponse.json(
          result,

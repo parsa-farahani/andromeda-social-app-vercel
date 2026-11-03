@@ -59,7 +59,6 @@ const Post = async (
 
    const likedIds = JSON.parse(JSON.stringify(likedIdsDocs)).map((l: Like) => l.post);
 
-   await new Promise((res) => setTimeout(res, 2000))
 
    return (
       <>

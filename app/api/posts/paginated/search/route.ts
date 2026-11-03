@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
 
       const result = await getSearchPosts({ q, tag }, cursor, user?._id);
 
-      await new Promise((res) => setTimeout(res, 1000))
 
       return NextResponse.json(
          result,

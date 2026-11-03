@@ -15,7 +15,6 @@ const Search = async ({
 
    const key = JSON.stringify(params);
 
-   await new Promise((res) => setTimeout(res, 1000));
 
 
    // We used 'Suspense' with a 'key' from 'params' here, because

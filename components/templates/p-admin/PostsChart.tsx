@@ -29,7 +29,6 @@ const PostsChart = async () => {
 
    const totalComments = comments.reduce((sum, d) => sum + d.count, 0);
 
-   await new Promise(res => setTimeout(res, 2000))
 
 
   return (

@@ -5,10 +5,8 @@ import PostModel from "@/models/Post";
 import { collectCommentDescendants } from "@/utils/dbHelpers";
 import { deleteImage } from "@/utils/media/storage";
 import { authUser } from "@/utils/serverHelpers";
-import { unlink } from "fs/promises";
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
    
@@ -83,16 +81,6 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
       await CommentModel.deleteMany({ _id: { $in: allIds } });
 
-      // const allowedBase = path.join(process.cwd(), "public", "images", "posts") + path.sep;
-     
-      // for (const image of allImages) {
-
-      //    const filePath = path.join(process.cwd(), 'public', image);
-
-      //    if (!filePath.startsWith(allowedBase)) continue;
-
-      //    await unlink(filePath).catch(() => {});
-      // }
 
       await Promise.all(allImages.map((url) => deleteImage(url)));
 

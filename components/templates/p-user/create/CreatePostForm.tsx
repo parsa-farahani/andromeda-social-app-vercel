@@ -147,13 +147,13 @@ const CreatePostForm = (
       setValue("title", "");
       setValue("image", undefined);
       setValue("tags", []);
-   
-      // router.push('/p-user');
-      // router.refresh();
-      
-      // router.replace('/p-user')
-      // router.refresh();
 
+      setImagePreview(null);
+   
+      if (!isModal) {
+         router.push('/p-user');
+      }
+      
    }
 
 

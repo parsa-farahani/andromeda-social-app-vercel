@@ -24,7 +24,7 @@ export async function GET(
 
    const { path: parts } = await params;
    
-   const filePath = path.join( process.cwd(), "uploads", ...parts );
+   const filePath = path.join( process.cwd(), "uploads", "images", ...parts );
 
    // to avoid path-traversal
    if (!filePath.startsWith(UPLOADS_ROOT)) {
@@ -52,7 +52,7 @@ export async function GET(
          {
             headers: {
                "Content-Type": type,
-               "Cache-Control": "public, max-age=31536000, immutable",
+               "Cache-Control": "public, max-age=2592000, immutable",
                "X-Content-Type-Options": "nosniff",
             },
          }

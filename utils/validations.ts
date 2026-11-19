@@ -1,5 +1,15 @@
 import { z } from 'zod';
 
+
+// const storage = process.env.STORAGE_DRIVER ?? "local";
+
+
+const MAX_POST_IMAGE_SIZE = 4 * 1024 * 1024;
+const MAX_COMMENT_IMAGE_SIZE = MAX_POST_IMAGE_SIZE;
+
+const MAX_AVATAR_IMAGE_SIZE = 2 * 1024 * 1024;
+
+
 // SignUp Schema
 export const signupSchema = z.object(
    {
@@ -78,7 +88,7 @@ export const postSchema = z.object(
          (files) =>
          !files ||
          files.length === 0 ||
-         files[0].size <= 4 * 1024 * 1024,
+         files[0].size <= MAX_POST_IMAGE_SIZE,
          "Image size must be less than 10MB"
       ),
 
@@ -118,7 +128,7 @@ export const postActionSchema = z.object(
          "Please select an image file"
       )
       .refine(
-         (file) => file.size <= 4 * 1024 * 1024,
+         (file) => file.size <= MAX_POST_IMAGE_SIZE,
          "Image size must be less than 10MB"
       )
       .optional()
@@ -179,7 +189,7 @@ export const commentSchema = z.object(
          (files) =>
          !files ||
          files.length === 0 ||
-         files[0].size <= 4 * 1024 * 1024,
+         files[0].size <= MAX_COMMENT_IMAGE_SIZE,
          "Image size must be less than 10MB"
       ),
 
@@ -226,7 +236,7 @@ export const commentActionSchema = z.object(
          "Please select an image file"
       )
       .refine(
-         (file) => file.size <= 4 * 1024 * 1024,
+         (file) => file.size <= MAX_COMMENT_IMAGE_SIZE,
          "Image size must be less than 10MB"
       )
       .optional()
@@ -284,7 +294,7 @@ export const profileSchema = z.object(
          (files) =>
          !files ||
          files.length === 0 ||
-         files[0].size <= 2 * 1024 * 1024,
+         files[0].size <= MAX_AVATAR_IMAGE_SIZE,
          "Image size must be less than 2MB"
       ),
       
@@ -317,7 +327,7 @@ export const profileApiSchema = z.object(
          "Please select an image file"
       )
       .refine(
-         (file) => !file || file.size <= 2 * 1024 * 1024,
+         (file) => !file || file.size <= MAX_AVATAR_IMAGE_SIZE,
          "Image size must be less than 2MB"
       )
       .optional()

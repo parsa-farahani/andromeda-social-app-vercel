@@ -11,13 +11,14 @@ const CreatePost = async () => {
    await connectToDB();
    const user = await authUser();
 
+
   return (
    <>
       <InfoHeader user={user} />
 
       <hr className='mt-6 mb-3' />
 
-      <CreatePostForm user={user} />
+      <CreatePostForm user={user} isModal={false} />
    </>
   )
 }

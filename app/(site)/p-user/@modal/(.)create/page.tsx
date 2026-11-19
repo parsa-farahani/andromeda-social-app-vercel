@@ -16,7 +16,7 @@ const CreatePostModalPage = async () => {
    }
 
   return (
-      <CreatePostModal user={user} /> 
+      <CreatePostModal user={user}  /> 
   )
 }
 

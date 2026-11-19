@@ -5,7 +5,6 @@ import PostModel from "@/models/Post";
 import { collectCommentDescendants } from "@/utils/dbHelpers";
 import { deleteImage } from "@/utils/media/storage";
 import { authAdmin } from "@/utils/serverHelpers";
-import { unlink } from "fs/promises";
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
@@ -57,22 +56,6 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
 
       const allImages = [deletedComment.image, ...images].filter(Boolean) as string[];
-
-      // path.sep  ->  the separator of 'file-path' in OS
-      // e.g: in Mac/Linux -> /, in Windows -> \
-      // we add the eparator in the end of images-path, to disallow deleting files
-      // in other pathes (just we allow exactly in '/public/iamges/posts/')
-
-      // const allowedBase = path.join(process.cwd(), "public", "images", "posts") + path.sep;
-
-      // for (const image of allImages) {
-
-      //    const filePath = path.join(process.cwd(), 'public', image);
-
-      //    if (!filePath.startsWith(allowedBase)) continue;
-
-      //    await unlink(filePath).catch(() => {});
-      // }
       
       await Promise.all(allImages.map((url) => deleteImage(url)));
       
